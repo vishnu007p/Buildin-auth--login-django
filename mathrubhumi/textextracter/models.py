@@ -35,7 +35,7 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser):
     email = models.CharField(max_length=150,unique=True)
-    employee_number=models.CharField(max_length=20)
+    employee_number=models.CharField(max_length=20,unique=True)
 
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)

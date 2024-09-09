@@ -7,8 +7,16 @@
 </head>
 <body>
         <h1>Register !</h1>
+        {% if messages %}
+            <ul class="error-messages">
+                {% for message in messages %}
+                    <h2>{{ message }}</h2>
+                {% endfor %}
+            </ul>
+        {% endif %}
         <form action="{% url 'register_view' %}" method="post">
             {% csrf_token %}
+            
             <input type="email" name="email" id="email" placeholder="Email">
             <input type="text" name="employee_number" id="employee_number" placeholder="Employee Number">
             <input type="password" name="password" id="password" placeholder="Password">
