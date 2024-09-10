@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib import auth, messages
 from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.decorators import login_required
 
 from .models import CustomUser
 from .forms import CustomUserCreationForm
@@ -15,6 +16,9 @@ def home_view(request):
 
 def failed_view(request):
     return render(request, 'failed.html')
+
+def loggedout_view(request):
+    return redirect(request,'loggedout.html')
 
 def register_view(request):
     if request.method == 'POST':
@@ -59,12 +63,13 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
     if request.method == 'POST':
-        try:
-            employee_number=request.POST.get('email')
+            employee_number=request.POST.get('employee_number')
             password = request.POST.get('password')
             
             user = auth.authenticate(employee_number=employee_number,password=password)
-            print('inside')
+            print(employee_number)
+            print(password)
+            print(user)
             if user is not None:
                 print('inside none')
                 auth.login(request, user)
@@ -74,8 +79,12 @@ def login_view(request):
             else:
                 messages.error(request, 'Credentials does not match. ')
                 return redirect('login')
-        except KeyError:
-            messages.error(request,"Fields missing. ")
-            return redirect('login')
     return render(request,'login.html')
+
+@login_required(login_url = 'login')
+def logout(request):
+    request.session.flush()
+    auth.logout(request)
+    return redirect('loggedout')
+
 
