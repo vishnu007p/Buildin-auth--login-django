@@ -18,7 +18,7 @@ def failed_view(request):
     return render(request, 'failed.html')
 
 def loggedout_view(request):
-    return redirect(request,'loggedout.html')
+    return render(request,'loggedout.html')
 
 def register_view(request):
     if request.method == 'POST':
@@ -38,7 +38,6 @@ def register_view(request):
                 messages.error(request, 'Email already exists. Try logging in.')
             elif 'employee_number' in str(e):
                 messages.error(request, 'Employee number already exists. Please contact support or try again.')
-            print('duplicate email')
             return render(request,'register.html')
 
         # #form = CustomUserCreationForm(request.POST)
@@ -63,11 +62,11 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
     if request.method == 'POST':
-            employee_number=request.POST.get('employee_number')
+            email=request.POST.get('email')
             password = request.POST.get('password')
             
-            user = auth.authenticate(employee_number=employee_number,password=password)
-            print(employee_number)
+            user = auth.authenticate(email=email,password=password)
+            print(email)
             print(password)
             print(user)
             if user is not None:
