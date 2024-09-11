@@ -6,7 +6,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.decorators import login_required
 
 from .models import CustomUser
-from .forms import CustomUserCreationForm
+# from .forms import CustomUserCreationForm
 
 def admin_view(request):
     return render(request, 'admin.html')
@@ -60,18 +60,18 @@ def register_view(request):
         
 def login_view(request):
     if request.user.is_authenticated:
+        print("Logout First. ")
         return redirect('home')
     if request.method == 'POST':
             email=request.POST.get('email')
             password = request.POST.get('password')
             
             user = auth.authenticate(email=email,password=password)
-            print(email)
-            print(password)
-            print(user)
+            
             if user is not None:
-                print('inside none')
                 auth.login(request, user)
+                if request.user.is_authenticated:
+                    print("User logged in successfully")
                 if user.is_admin:
                     return redirect('admin')
                 return redirect('home')
