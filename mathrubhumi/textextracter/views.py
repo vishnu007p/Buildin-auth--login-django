@@ -31,7 +31,7 @@ def register_view(request):
         try:
             user = CustomUser.objects.create_user(email=email, employee_number=employee_number, password=password)
             user.save()
-            print('savedd')
+            print('Saved.')
             return redirect('login')
         except IntegrityError as e:
             if 'email' in str(e):
@@ -63,11 +63,9 @@ def login_view(request):
         print("Logout First. ")
         return redirect('home')
     if request.method == 'POST':
-            email=request.POST.get('email')
+            employee_number=request.POST.get('employee_number')
             password = request.POST.get('password')
-            
-            user = auth.authenticate(email=email,password=password)
-            
+            user = auth.authenticate(employee_number=employee_number,password=password)
             if user is not None:
                 auth.login(request, user)
                 if request.user.is_authenticated:
